@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.tcs" })
+@ComponentScan(basePackages = { "com.tcs.tennis" })
 public class SpringBootWebApplication 
 {
 	public static void main(String[] args) {

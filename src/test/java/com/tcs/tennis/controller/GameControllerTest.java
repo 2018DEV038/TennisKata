@@ -49,11 +49,17 @@ public class GameControllerTest {
 
 
     @Test
-       public void testgetGameStatus() throws Exception {
+       public void testGetGameStatusServiceByCallingBadRequest() throws Exception {
         this.mockMvc.perform(get("/tennis/score"))
                 .andExpect(status().isBadRequest());
-
     }
+
+    @Test
+    public void testGetGameStatusServiceByCallingSucessfully() throws Exception {
+        this.mockMvc.perform(get("/tennis/score").param("gameid","FDASDAD33SDA"))
+                .andExpect(status().isOk());
+    }
+
 
 
 }
