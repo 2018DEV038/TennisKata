@@ -21,6 +21,8 @@ public class TennisServiceImpl implements TennisService{
 	public OutputResponse getScoreDetails(TennisGame tennisGame) {
 		boolean isPlayerOneWonCurrentService = Utility.play();
 		addPlayerScoreCount(tennisGame.getPlayerOne(), tennisGame.getPlayerTwo(), isPlayerOneWonCurrentService);
+		String scoreDescription = calculateScoreDescription(tennisGame.getPlayerOne().getScore(), tennisGame.getPlayerTwo().getScore());
+
 		OutputResponse outputResponse = new OutputResponse();
 		return outputResponse;
 
@@ -46,6 +48,31 @@ public class TennisServiceImpl implements TennisService{
 			playerOne.setScore(0);
 			playerTwo.setScore(0);
 		}
+	}
+
+
+	/**
+	 *
+	 * logic used to calculate score Description
+	 *
+	 * @param playerOneScore
+	 * @param playerTwoScore
+	 * @return
+	 */
+	private String calculateScoreDescription(int playerOneScore, int playerTwoScore) {
+		logger.debug("calculateScoreDescription called");
+
+		if (!(playerOneScore <= 3 && playerTwoScore <= 3 && playerOneScore + playerTwoScore != 6)) {
+			if (Math.abs(playerOneScore - playerTwoScore) >= 2) {
+				return "WON_THE_SET";
+			} else if (playerOneScore == playerTwoScore) {
+				return " deuce";
+			} else {
+				return " advantage ";
+			}
+		}
+
+		return null;
 	}
 
 }
