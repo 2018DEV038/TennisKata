@@ -29,6 +29,7 @@ public class TennisServiceImpl implements TennisService{
 		addPlayerScoreCount(tennisGame.getPlayerOne(), tennisGame.getPlayerTwo(), isPlayerOneWonCurrentService);
 		String scoreDescription = calculateScoreDescription(tennisGame.getPlayerOne().getScore(), tennisGame.getPlayerTwo().getScore());
 		OutputResponse outputResponse = mappingOutputResponse(tennisGame, scoreDescription, isPlayerOneWonCurrentService);
+		resetGame(tennisGame.getPlayerOne(), tennisGame.getPlayerTwo(), outputResponse);
 
 		return outputResponse;
 
@@ -159,6 +160,24 @@ public class TennisServiceImpl implements TennisService{
 			score.append(PointDescriptionEnum.get(playerTwo.getScore()));
 		}
 		return score.toString();
+	}
+
+	/**
+	 * Finally Reset method called to reset score value
+	 *
+	 * @param playerOne
+	 * @param playerTwo
+	 * @param outputResponse
+	 */
+	private void resetGame(Player playerOne, Player playerTwo, OutputResponse outputResponse) {
+		logger.debug("resetGame called");
+
+		if (outputResponse.getScore().contains(Constants.WON)) {
+			outputResponse.setGameStatus(Constants.GAME_OVER);
+			playerOne.reset(-1);
+			playerTwo.reset(-1);
+		}
+
 	}
 
 

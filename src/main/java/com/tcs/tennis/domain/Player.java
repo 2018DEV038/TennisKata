@@ -19,9 +19,12 @@ public class Player {
         return name;
     }
 
-
     public Player(String name) {
        this.name = name;
+    }
+
+    public void reset(int score){
+        this.score = score;
     }
 
 }

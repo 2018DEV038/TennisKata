@@ -288,11 +288,15 @@ public class TennisServiceImplTest {
 
     }
 
+    @Test
+    public void testToVerifyResetGame() {
+        playerOneWon();
+        playerOne.setScore(4);
+        playerTwo.setScore(3);
+        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
+        assertEquals("YAN WON THE SET ", outputResponse.getScore());
 
-
-
-
-
+    }
 
     private void playerOneWon(){
         new MockUp<Utility>() {
