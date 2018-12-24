@@ -3,10 +3,13 @@ package com.tcs.tennis.service;
 import com.tcs.tennis.domain.Player;
 import com.tcs.tennis.domain.TennisGame;
 import com.tcs.tennis.dto.OutputResponse;
+import com.tcs.tennis.util.Constants;
+import com.tcs.tennis.util.PointDescriptionEnum;
 import com.tcs.tennis.util.Utility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class TennisServiceImpl implements TennisService{
@@ -110,21 +113,46 @@ public class TennisServiceImpl implements TennisService{
 				tennisGame.getPlayerTwo().getName(),
 				isPlayerOneWonCurrentService);
 		StringBuilder pointDetails = new StringBuilder();
-		pointDetails.append("POINT_GOES_TO");
+		pointDetails.append(Constants.POINT_GOES_TO);
 		pointDetails.append(currentServiceWinner);
 		OutputResponse outputResponse = new OutputResponse ();
 		outputResponse.setCurrentService(pointDetails.toString());
 		outputResponse.setPlayers(tennisGame.getPlayersName());
+		outputResponse.setScore(getScoreValue(tennisGame.getPlayerOne(), tennisGame.getPlayerTwo(), scoreDescription, currentServiceWinner));
 
 		if (tennisGame.getPlayerOne().getScore() == 0 && tennisGame.getPlayerTwo().getScore() == 0) {
-			outputResponse.setGameStatus("GAME_STARTED");
-			outputResponse.setCurrentService("GET_READY");
+			outputResponse.setGameStatus(Constants.GAME_STARTED);
+			outputResponse.setCurrentService(Constants.GET_READY);
 		} else {
-			outputResponse.setGameStatus("GAME_IN_PROGRESS");
+			outputResponse.setGameStatus(Constants.GAME_IN_PROGRESS);
 		}
 
 		return outputResponse;
 	}
 
+	/**
+	 *
+	 * Score Value for all different logics
+	 *
+	 * @param playerOne
+	 * @param playerTwo
+	 * @param scoreDescription
+	 * @param playerName
+	 * @return
+	 */
+	private String getScoreValue(Player playerOne, Player playerTwo, String scoreDescription, String playerName) {
+		logger.debug("getScoreValue called");
 
+		StringBuilder score = new StringBuilder();
+		if (!StringUtils.isEmpty(scoreDescription)) {
+			score.append(playerName);
+			score.append(scoreDescription);
+
+		} else {
+			score.append(PointDescriptionEnum.get(playerOne.getScore()));
+			score.append(" - ");
+			score.append(PointDescriptionEnum.get(playerTwo.getScore()));
+		}
+		return score.toString();
+	}
 }

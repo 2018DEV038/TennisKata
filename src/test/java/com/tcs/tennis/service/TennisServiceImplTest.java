@@ -1,11 +1,8 @@
 package com.tcs.tennis.service;
 
-import com.tcs.tennis.domain.Player;
-import com.tcs.tennis.domain.TennisGame;
-import com.tcs.tennis.dto.OutputResponse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import com.tcs.tennis.util.Utility;
-import mockit.MockUp;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,8 +11,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
+import com.tcs.tennis.domain.Player;
+import com.tcs.tennis.domain.TennisGame;
+import com.tcs.tennis.dto.OutputResponse;
+import com.tcs.tennis.util.Constants;
+import com.tcs.tennis.util.Utility;
+
+import mockit.MockUp;
 
 @RunWith(SpringRunner.class)
 public class TennisServiceImplTest {
@@ -236,7 +238,15 @@ public class TennisServiceImplTest {
 
     }
 
+    @Test
+    public void testToCheckOutputResponseObjectGameStatusValueGameInProgress() {
+        playerTwoWon();
+        playerOne.setScore(3);
+        playerTwo.setScore(2);
+        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
+        assertEquals(Constants.GAME_IN_PROGRESS, outputResponse.getGameStatus());
 
+    }
 
     @Test
     public void testToCheckOutputResponseObjectLPlayerName() {
@@ -254,7 +264,7 @@ public class TennisServiceImplTest {
         playerTwo.setScore(-1);
         playerOne.setScore(0);
         OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
-        assertEquals("GAME_STARTED", outputResponse.getGameStatus());
+        assertEquals(Constants.GAME_STARTED, outputResponse.getGameStatus());
 
     }
 
@@ -264,7 +274,7 @@ public class TennisServiceImplTest {
         playerTwo.setScore(-1);
         playerOne.setScore(0);
         OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
-        assertEquals("GET_READY", outputResponse.getCurrentService());
+        assertEquals(Constants.GET_READY, outputResponse.getCurrentService());
 
     }
 
@@ -274,24 +284,9 @@ public class TennisServiceImplTest {
         playerOne.setScore(4);
         playerTwo.setScore(3);
         OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
-        assertEquals("GAME_OVER", outputResponse.getGameStatus());
+        assertEquals(Constants.GAME_OVER, outputResponse.getGameStatus());
 
     }
-
-
-
-
-    @Test
-    public void testToVerifyResetGame() {
-        playerOneWon();
-        playerOne.setScore(4);
-        playerTwo.setScore(3);
-        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
-        assertEquals("YAN WON THE SET ", outputResponse.getScore());
-
-    }
-
-
 
     private void playerOneWon(){
         new MockUp<Utility>() {
