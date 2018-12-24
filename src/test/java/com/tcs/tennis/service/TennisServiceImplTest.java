@@ -1,11 +1,9 @@
 package com.tcs.tennis.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import com.tcs.tennis.domain.Player;
 import com.tcs.tennis.domain.TennisGame;
 import com.tcs.tennis.dto.OutputResponse;
+
 import com.tcs.tennis.util.Utility;
 import mockit.MockUp;
 import org.junit.After;
@@ -15,6 +13,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 public class TennisServiceImplTest {
@@ -149,7 +150,39 @@ public class TennisServiceImplTest {
         assertEquals("YAN advantage ", outputResponse.getScore());
 
     }
-    
+
+
+
+    @Test
+    public void testToCurrentServiceWinnerForPlayerOne() {
+        playerOneWon();
+        playerOne.setScore(5);
+        playerTwo.setScore(5);
+        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
+        assertEquals("Point Goes to YAN", outputResponse.getCurrentService());
+
+    }
+
+    @Test
+    public void testToCurrentServiceWinnerForPlayerTwo() {
+        playerTwoWon();
+        playerOne.setScore(1);
+        playerTwo.setScore(1);
+        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
+        assertEquals("Point Goes to ZOHA", outputResponse.getCurrentService());
+
+    }
+
+
+    @Test
+    public void testToVerifyMappingOutputResponse() {
+        playerOne.setScore(2);
+        playerTwo.setScore(3);
+        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
+        assertNotNull(outputResponse);
+
+    }
+
 
     @Test
     public void testToCheckOutputResponseObjectPointDescriptionToPlayerOne() {
@@ -204,25 +237,60 @@ public class TennisServiceImplTest {
     }
 
 
-    @Test
-    public void testToCurrentServiceWinnerForPlayerOne() {
-        playerOneWon();
-        playerOne.setScore(5);
-        playerTwo.setScore(5);
-        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
-        assertEquals("Point Goes to YAN", outputResponse.getCurrentService());
-
-    }
 
     @Test
-    public void testToCurrentServiceWinnerForPlayerTwo() {
+    public void testToCheckOutputResponseObjectLPlayerName() {
         playerTwoWon();
-        playerOne.setScore(1);
-        playerTwo.setScore(1);
+        playerTwo.setScore(-1);
+        playerOne.setScore(0);
         OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
-        assertEquals("Point Goes to ZOHA", outputResponse.getCurrentService());
+        assertEquals("YAN VS ZOHA", outputResponse.getPlayers());
 
     }
+
+    @Test
+    public void testToCheckOutputResponseObjectGameStatusValueGameStarted() {
+        playerTwoWon();
+        playerTwo.setScore(-1);
+        playerOne.setScore(0);
+        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
+        assertEquals("GAME_STARTED", outputResponse.getGameStatus());
+
+    }
+
+    @Test
+    public void testToCheckOutputResponseObjectCurrentServiceGetReadyStatus() {
+        playerTwoWon();
+        playerTwo.setScore(-1);
+        playerOne.setScore(0);
+        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
+        assertEquals("GET_READY", outputResponse.getCurrentService());
+
+    }
+
+    @Test
+    public void testToCheckOutputResponseObjectGameStatusValueGameOver() {
+        playerOneWon();
+        playerOne.setScore(4);
+        playerTwo.setScore(3);
+        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
+        assertEquals("GAME_OVER", outputResponse.getGameStatus());
+
+    }
+
+
+
+
+    @Test
+    public void testToVerifyResetGame() {
+        playerOneWon();
+        playerOne.setScore(4);
+        playerTwo.setScore(3);
+        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
+        assertEquals("YAN WON THE SET ", outputResponse.getScore());
+
+    }
+
 
 
     private void playerOneWon(){

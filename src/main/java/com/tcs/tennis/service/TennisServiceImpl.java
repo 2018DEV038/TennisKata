@@ -22,8 +22,7 @@ public class TennisServiceImpl implements TennisService{
 		boolean isPlayerOneWonCurrentService = Utility.play();
 		addPlayerScoreCount(tennisGame.getPlayerOne(), tennisGame.getPlayerTwo(), isPlayerOneWonCurrentService);
 		String scoreDescription = calculateScoreDescription(tennisGame.getPlayerOne().getScore(), tennisGame.getPlayerTwo().getScore());
-
-		OutputResponse outputResponse = new OutputResponse();
+		OutputResponse outputResponse = mappingOutputResponse(tennisGame, scoreDescription, isPlayerOneWonCurrentService);
 		return outputResponse;
 
 	}
@@ -93,5 +92,39 @@ public class TennisServiceImpl implements TennisService{
 			return playerTwoName;
 
 	}
+
+	/**
+	 *
+	 * Mapping all fields to display in output
+	 *
+	 * @param tennisGame
+	 * @param scoreDescription
+	 * @param isPlayerOneWonCurrentService
+	 * @return
+	 */
+	private OutputResponse mappingOutputResponse(TennisGame tennisGame, String scoreDescription,
+												 boolean isPlayerOneWonCurrentService) {
+		logger.debug("mappingOutputResponse called");
+
+		String currentServiceWinner = getcurrentServiceWinner(tennisGame.getPlayerOne().getName(),
+				tennisGame.getPlayerTwo().getName(),
+				isPlayerOneWonCurrentService);
+		StringBuilder pointDetails = new StringBuilder();
+		pointDetails.append("POINT_GOES_TO");
+		pointDetails.append(currentServiceWinner);
+		OutputResponse outputResponse = new OutputResponse ();
+		outputResponse.setCurrentService(pointDetails.toString());
+		outputResponse.setPlayers(tennisGame.getPlayersName());
+
+		if (tennisGame.getPlayerOne().getScore() == 0 && tennisGame.getPlayerTwo().getScore() == 0) {
+			outputResponse.setGameStatus("GAME_STARTED");
+			outputResponse.setCurrentService("GET_READY");
+		} else {
+			outputResponse.setGameStatus("GAME_IN_PROGRESS");
+		}
+
+		return outputResponse;
+	}
+
 
 }
