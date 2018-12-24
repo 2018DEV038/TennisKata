@@ -74,5 +74,24 @@ public class TennisServiceImpl implements TennisService{
 
 		return null;
 	}
+	/**
+	 *
+	 * Identify Current Service Winner
+	 *
+	 * @param playerOneName
+	 * @param playerTwoName
+	 * @param isPlayerOneWonCurrentService
+	 * @return
+	 */
+	private String getcurrentServiceWinner(String playerOneName, String playerTwoName,
+										   boolean isPlayerOneWonCurrentService) {
+		logger.debug("getcurrentServiceWinner called");
+
+		if (isPlayerOneWonCurrentService)
+			return playerOneName;
+		else
+			return playerTwoName;
+
+	}
 
 }

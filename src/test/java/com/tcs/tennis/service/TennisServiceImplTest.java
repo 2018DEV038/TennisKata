@@ -149,22 +149,7 @@ public class TennisServiceImplTest {
         assertEquals("YAN advantage ", outputResponse.getScore());
 
     }
-
-
-
-    @Test
-    public void testToCurrentServiceWinnerForPlayerOne() {
-        playerOneWon();
-        playerOne.setScore(5);
-        playerTwo.setScore(5);
-        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
-        assertEquals("Point Goes to YAN", outputResponse.getCurrentService());
-
-    }
-
-
-
-
+    
 
     @Test
     public void testToCheckOutputResponseObjectPointDescriptionToPlayerOne() {
@@ -219,14 +204,25 @@ public class TennisServiceImplTest {
     }
 
 
+    @Test
+    public void testToCurrentServiceWinnerForPlayerOne() {
+        playerOneWon();
+        playerOne.setScore(5);
+        playerTwo.setScore(5);
+        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
+        assertEquals("Point Goes to YAN", outputResponse.getCurrentService());
 
+    }
 
+    @Test
+    public void testToCurrentServiceWinnerForPlayerTwo() {
+        playerTwoWon();
+        playerOne.setScore(1);
+        playerTwo.setScore(1);
+        OutputResponse outputResponse = tennisServiceImpl.getScoreDetails(tennisGame);
+        assertEquals("Point Goes to ZOHA", outputResponse.getCurrentService());
 
-
-
-
-
-
+    }
 
 
     private void playerOneWon(){
