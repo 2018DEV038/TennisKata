@@ -1,8 +1,5 @@
 package com.tcs.tennis.domain;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class TennisGame {
 
     private Player playerOne;

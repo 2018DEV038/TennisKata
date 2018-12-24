@@ -11,13 +11,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 @Service
 public class TennisServiceImpl implements TennisService{
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-
-
+	private static final Map<String, TennisGame> TENNIS_GAME_MAP = new HashMap<>();
 
 	/**
 	 * getScoreDetails Service to calculate add score point, Game Status,Game  Score and Current Service Result
@@ -34,6 +36,34 @@ public class TennisServiceImpl implements TennisService{
 		return outputResponse;
 
 	}
+
+	/**
+	 *
+	 * Generate unique Id for player set  and Stored in HashMap static variable
+	 *
+	 *
+	 */
+	public String registerGame(String playerOneName, String playerTwoName){
+
+		TennisGame tennisGame = new TennisGame(new Player(playerOneName), new Player(playerTwoName));
+		String uniqueId = UUID.randomUUID().toString();
+		synchronized (TENNIS_GAME_MAP) {
+			if(null == TENNIS_GAME_MAP.get(uniqueId)) {
+				TENNIS_GAME_MAP.put(uniqueId, tennisGame);
+			}
+		}
+		return uniqueId;
+	}
+
+	/**
+	 *
+	 * get player details based on unique value
+	 *
+	 */
+	public TennisGame retrieveGameDetails(String gameId){
+		return TENNIS_GAME_MAP.get(gameId);
+	}
+
 
 	/**
 	 *
@@ -179,7 +209,5 @@ public class TennisServiceImpl implements TennisService{
 		}
 
 	}
-
-
 
 }
