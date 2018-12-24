@@ -14,18 +14,22 @@ import org.springframework.util.StringUtils;
 @Service
 public class TennisServiceImpl implements TennisService{
 
-	   private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
 
 
 	/**
-	 * getScoreDetails Service to calculate add scoOre point, Game Status,Game  Score and Current Service Result
-	 * 
+	 * getScoreDetails Service to calculate add score point, Game Status,Game  Score and Current Service Result
+	 *
 	 */
 	public OutputResponse getScoreDetails(TennisGame tennisGame) {
+		logger.debug("getScoreDetails called");
 		boolean isPlayerOneWonCurrentService = Utility.play();
 		addPlayerScoreCount(tennisGame.getPlayerOne(), tennisGame.getPlayerTwo(), isPlayerOneWonCurrentService);
 		String scoreDescription = calculateScoreDescription(tennisGame.getPlayerOne().getScore(), tennisGame.getPlayerTwo().getScore());
 		OutputResponse outputResponse = mappingOutputResponse(tennisGame, scoreDescription, isPlayerOneWonCurrentService);
+
 		return outputResponse;
 
 	}
@@ -66,7 +70,7 @@ public class TennisServiceImpl implements TennisService{
 
 		if (!(playerOneScore <= 3 && playerTwoScore <= 3 && playerOneScore + playerTwoScore != 6)) {
 			if (Math.abs(playerOneScore - playerTwoScore) >= 2) {
-				return "WON_THE_SET";
+				return Constants.WON_THE_SET;
 			} else if (playerOneScore == playerTwoScore) {
 				return " deuce";
 			} else {
@@ -76,6 +80,7 @@ public class TennisServiceImpl implements TennisService{
 
 		return null;
 	}
+
 	/**
 	 *
 	 * Identify Current Service Winner
@@ -155,4 +160,7 @@ public class TennisServiceImpl implements TennisService{
 		}
 		return score.toString();
 	}
+
+
+
 }
